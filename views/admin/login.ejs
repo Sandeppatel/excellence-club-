@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Excellence Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">
+                EC
+            </div>
+
+            <h1 class="text-2xl font-bold text-slate-800 mt-4">
+                Admin Login
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Excellence Club Management Portal
+            </p>
+        </div>
+
+        <div id="message" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+
+        <form id="adminLoginForm" class="space-y-5">
+
+            <div>
+                <label class="block text-sm font-medium mb-2">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    placeholder="admin@example.com"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-2">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    placeholder="Enter your password"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                >
+            </div>
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
+            >
+                Login to Dashboard
+            </button>
+
+        </form>
+
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Excellence Club | Admin Portal
+        </p>
+
+    </div>
+
+    <script>
+        const form = document.getElementById("adminLoginForm");
+        const message = document.getElementById("message");
+        const button = document.getElementById("loginButton");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            button.disabled = true;
+            button.textContent = "Logging in...";
+
+            try {
+                const response = await fetch("/admin/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value,
+                        password: document.getElementById("password").value
+                    })
+                });
+
+                const result = await response.json();
+
+                message.classList.remove("hidden");
+
+                if (result.success) {
+                    message.className = "mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700";
+                    message.textContent = result.message;
+
+                    window.location.href = "/admin/dashboard";
+                } else {
+                    message.className = "mb-4 p-3 rounded-lg text-sm bg-red-100 text-red-700";
+                    message.textContent = result.message;
+                }
+
+            } catch (error) {
+                message.classList.remove("hidden");
+                message.textContent = "Something went wrong. Please try again.";
+                message.className = "mb-4 p-3 rounded-lg text-sm bg-red-100 text-red-700";
+            } finally {
+                button.disabled = false;
+                button.textContent = "Login to Dashboard";
+            }
+        });
+    </script>
+
+</body>
+</html>

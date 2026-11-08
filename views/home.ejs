@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,65 +7,296 @@
     <title>Excellence Club | Learn • Grow • Achieve</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .hero {
+            background:
+                linear-gradient(90deg, rgba(9, 25, 55, .95), rgba(9, 25, 55, .55)),
+                url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=85");
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
 </head>
 
-<body class="bg-slate-50">
+<body class="bg-white text-slate-800">
 
-    <nav class="bg-slate-950 text-white px-8 py-5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">
-                Excellence<span class="text-blue-400">Club.</span>
-            </h1>
+    <%- include('partials/navbar') %>
 
-            <div class="hidden md:flex gap-8">
-                <a href="/" class="hover:text-blue-400">Home</a>
-                <a href="#about" class="hover:text-blue-400">About</a>
-                <a href="#courses" class="hover:text-blue-400">Courses</a>
-                <a href="#contact" class="hover:text-blue-400">Contact</a>
+    <!-- HERO SECTION -->
+    <section id="home" class="hero min-h-[650px] flex items-center text-white">
+        <div class="max-w-7xl mx-auto px-6 py-24 w-full">
+
+            <div class="max-w-3xl">
+                <span class="inline-block bg-blue-500/20 border border-blue-300/30 px-4 py-2 rounded-full text-sm mb-7">
+                    Welcome to Excellence Club
+                </span>
+
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+                    Unlock Your Potential with
+                    <span class="text-blue-400">Excellence Club</span>
+                </h1>
+
+                <p class="text-slate-200 text-lg mt-6 leading-8 max-w-2xl">
+                    Learn, grow and achieve your dreams with quality
+                    educational resources, guidance and learning opportunities.
+                    Your journey towards excellence starts here.
+                </p>
+
+                <div class="flex flex-wrap gap-4 mt-9">
+                    <a href="#about"
+                       class="bg-blue-600 hover:bg-blue-700 px-7 py-4 rounded-lg font-semibold transition">
+                        Join Our Community
+                    </a>
+
+                    <a href="#courses"
+                       class="border border-white hover:bg-white hover:text-slate-900 px-7 py-4 rounded-lg font-semibold transition">
+                        Explore Courses →
+                    </a>
+                </div>
+
+                <p class="mt-8 text-blue-200 font-medium tracking-wide">
+                    LEARN &nbsp; • &nbsp; GROW &nbsp; • &nbsp; ACHIEVE
+                </p>
             </div>
 
-            <a href="#courses"
-               class="bg-blue-600 px-5 py-2 rounded-lg hover:bg-blue-700">
-                Explore
-            </a>
         </div>
-    </nav>
+    </section>
 
-    <main class="min-h-[80vh] flex items-center justify-center px-6">
-        <section class="text-center max-w-3xl">
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
 
-            <p class="text-blue-600 font-semibold mb-4">
-                LEARN • GROW • ACHIEVE
-            </p>
+            <div>
+                <span class="text-blue-700 font-semibold uppercase tracking-wider text-sm">
+                    About Us
+                </span>
 
-            <h2 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">
-                Unlock Your Potential with
-                <span class="text-blue-600">Excellence Club</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-4 text-slate-900">
+                    Education is the foundation of a better future.
+                </h2>
+
+                <p class="text-slate-600 leading-8 mt-6">
+                    Excellence Club is an educational initiative focused on
+                    supporting students of Classes 9th to 12th. We aim to make
+                    learning more accessible through study resources, academic
+                    guidance, quizzes and educational activities.
+                </p>
+
+                <p class="text-slate-600 leading-8 mt-4">
+                    Our goal is to help students build knowledge, confidence,
+                    creativity and the skills needed for their future.
+                </p>
+
+                <a href="#mission"
+                   class="inline-block mt-7 text-blue-700 font-semibold hover:underline">
+                    Discover Our Mission →
+                </a>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden shadow-xl">
+                <img
+                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=85"
+                    alt="Students learning together"
+                    class="w-full h-[400px] object-cover"
+                >
+            </div>
+
+        </div>
+    </section>
+
+    <!-- COURSES SECTION -->
+    <section id="courses" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-blue-700 font-semibold uppercase text-sm">
+                    Our Programs
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-3">
+                    Learning for Every Class
+                </h2>
+
+                <p class="text-slate-600 mt-4">
+                    Explore learning opportunities designed for students
+                    from Class 9th to Class 12th.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <% const classes = [
+                    {name: "Class 9th", subjects: "Mathematics, Science, English, Social Science"},
+                    {name: "Class 10th", subjects: "Mathematics, Science, English, Social Science"},
+                    {name: "Class 11th", subjects: "Physics, Chemistry, Mathematics, Biology"},
+                    {name: "Class 12th", subjects: "Physics, Chemistry, Mathematics, Biology, Commerce"}
+                ]; %>
+
+                <% classes.forEach((item, index) => { %>
+                    <div class="bg-white p-7 rounded-2xl border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition duration-300">
+
+                        <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-2xl font-bold">
+                            <%= index + 9 %>
+                        </div>
+
+                        <h3 class="text-xl font-bold mt-6 text-slate-900">
+                            <%= item.name %>
+                        </h3>
+
+                        <p class="text-slate-500 text-sm mt-3 leading-7">
+                            <%= item.subjects %>
+                        </p>
+
+                        <a href="#contact"
+                           class="inline-block mt-6 text-blue-700 font-semibold text-sm">
+                            Explore Learning →
+                        </a>
+                    </div>
+                <% }) %>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MISSION SECTION -->
+    <section id="mission" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-blue-700 font-semibold uppercase text-sm">
+                    Our Purpose
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-bold mt-3 text-slate-900">
+                    Our Mission & Vision
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+
+                <div class="bg-blue-700 text-white p-10 rounded-2xl">
+                    <div class="text-4xl mb-5">🎯</div>
+                    <h3 class="text-2xl font-bold">Our Mission</h3>
+                    <p class="text-blue-100 leading-8 mt-5">
+                        To provide quality educational resources, guidance,
+                        learning opportunities, quizzes and academic support
+                        to students, especially those who need accessible
+                        learning opportunities.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-10 rounded-2xl">
+                    <div class="text-4xl mb-5">🚀</div>
+                    <h3 class="text-2xl font-bold">Our Vision</h3>
+                    <p class="text-slate-300 leading-8 mt-5">
+                        To build a learning community where every student
+                        gets the opportunity to discover their potential,
+                        develop confidence and work towards a better future.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ACHIEVEMENTS SECTION -->
+    <section id="achievements" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-blue-700 font-semibold uppercase text-sm">
+                    Our Commitment
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-bold mt-3 text-slate-900">
+                    Growing Through Learning
+                </h2>
+
+                <p class="text-slate-600 mt-4">
+                    We believe achievement is not only about marks.
+                    It is also about knowledge, confidence and participation.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-3xl">📚</div>
+                    <h3 class="font-bold text-xl mt-5">Learning Resources</h3>
+                    <p class="text-slate-600 mt-3 leading-7">
+                        Helping students access useful study materials
+                        and educational content.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-3xl">🏆</div>
+                    <h3 class="font-bold text-xl mt-5">Competitions</h3>
+                    <p class="text-slate-600 mt-3 leading-7">
+                        Encouraging participation in quizzes,
+                        debates and educational activities.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-3xl">🤝</div>
+                    <h3 class="font-bold text-xl mt-5">Student Community</h3>
+                    <p class="text-slate-600 mt-3 leading-7">
+                        Building a supportive environment where
+                        students can learn and grow together.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT / JOIN SECTION -->
+    <section id="contact" class="py-20 bg-blue-700 text-white text-center">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold">
+                Be a Part of Excellence Club
             </h2>
 
-            <p class="text-gray-600 text-lg mt-6">
-                A learning community for students of Classes 9th to 12th.
-                Learn together, grow together and achieve excellence.
+            <p class="text-blue-100 mt-5 leading-7">
+                Start your learning journey with us.
+                Learn new things, build confidence and achieve your goals.
             </p>
 
-            <div class="flex flex-wrap justify-center gap-4 mt-8">
-                <a href="#courses"
-                   class="bg-blue-600 text-white px-7 py-3 rounded-lg">
-                    Explore Courses
-                </a>
+            <a href="mailto:excellenceclub@example.com"
+               class="inline-block mt-8 bg-white text-blue-700 px-8 py-4 rounded-lg font-bold hover:bg-slate-100 transition">
+                Contact Us
+            </a>
+        </div>
+    </section>
 
-                <a href="#about"
-                   class="border border-slate-400 px-7 py-3 rounded-lg">
-                    Learn More
-                </a>
-            </div>
+    <%- include('partials/footer') %>
 
-        </section>
-    </main>
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
 
-    <footer class="bg-slate-950 text-white text-center py-6">
-        <p>© 2026 Excellence Club. Learn • Grow • Achieve.</p>
-    </footer>
+        menuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+
+        document.querySelectorAll("#mobileMenu a").forEach(link => {
+            link.addEventListener("click", () => {
+                mobileMenu.classList.add("hidden");
+            });
+        });
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
 </body>
 </html>

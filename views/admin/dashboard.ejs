@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Excellence Club</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">
+            Excellence Club Admin
+        </h1>
+
+        <form action="/admin/logout" method="POST">
+            <button type="submit"
+                class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                Logout
+            </button>
+        </form>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <main class="p-6 md:p-8">
+
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Welcome, <%= admin.fullName %>
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Manage your Excellence Club platform from here.
+            </p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <!-- Total Students -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <p class="text-gray-500 font-medium">Total Students</p>
+                <h2 class="text-3xl font-bold text-blue-600 mt-3">
+                    <%= totalStudents %>
+                </h2>
+            </div>
+
+            <!-- Active Students -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <p class="text-gray-500 font-medium">Active Students</p>
+                <h2 class="text-3xl font-bold text-green-600 mt-3">
+                    <%= activeStudents %>
+                </h2>
+            </div>
+
+            <!-- Total Courses -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <p class="text-gray-500 font-medium">Total Courses</p>
+                <h2 class="text-3xl font-bold text-purple-600 mt-3">
+                    <%= totalCourses %>
+                </h2>
+            </div>
+
+            <!-- Published Courses -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <p class="text-gray-500 font-medium">Published Courses</p>
+                <h2 class="text-3xl font-bold text-orange-600 mt-3">
+                    <%= publishedCourses %>
+                </h2>
+            </div>
+
+        </div>
+
+        <!-- Recent Students -->
+        <section class="bg-white rounded-xl shadow mt-8 p-6">
+
+            <h2 class="text-xl font-bold text-gray-800 mb-5">
+                Recent Registered Students
+            </h2>
+
+            <% if (recentStudents && recentStudents.length > 0) { %>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+
+                        <thead>
+                            <tr class="border-b text-gray-500">
+                                <th class="py-3 px-3">Name</th>
+                                <th class="py-3 px-3">Email</th>
+                                <th class="py-3 px-3">Class</th>
+                                <th class="py-3 px-3">Registered</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% recentStudents.forEach(student => { %>
+
+                                <tr class="border-b hover:bg-gray-50">
+
+                                    <td class="py-3 px-3 font-medium">
+                                        <%= student.fullName %>
+                                    </td>
+
+                                    <td class="py-3 px-3 text-gray-600">
+                                        <%= student.email %>
+                                    </td>
+
+                                    <td class="py-3 px-3">
+                                        <%= student.class %>
+                                    </td>
+
+                                    <td class="py-3 px-3 text-gray-600">
+                                        <%= new Date(student.createdAt).toLocaleDateString("en-IN") %>
+                                    </td>
+
+                                </tr>
+
+                            <% }); %>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            <% } else { %>
+
+                <p class="text-gray-500 py-4">
+                    No students registered yet.
+                </p>
+
+            <% } %>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
