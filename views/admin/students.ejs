@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students | Excellence Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Excellence Club Admin</h1>
+
+        <div class="flex gap-3">
+            <a href="/admin/dashboard" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+                Dashboard
+            </a>
+
+            <form action="/admin/logout" method="POST">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="p-6 md:p-8">
+
+        <!-- Page Heading -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">
+                Manage Students
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+                View and manage all registered Excellence Club students.
+            </p>
+        </div>
+
+        <!-- Student Count -->
+        <div class="bg-white p-5 rounded-xl shadow mb-6">
+            <p class="text-gray-500">Total Registered Students</p>
+
+            <h3 class="text-3xl font-bold text-blue-600 mt-2">
+                <%= students.length %>
+            </h3>
+        </div>
+
+        <!-- Students Table -->
+        <section class="bg-white rounded-xl shadow p-6">
+
+            <h3 class="text-xl font-bold mb-5 text-gray-800">
+                All Registered Students
+            </h3>
+
+            <!-- Search Students -->
+            <div class="mb-5">
+                <input type="text" id="studentSearch" placeholder="Search by student name or email..."
+                    class="w-full md:w-96 px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Filter Students by Class -->
+            <div class="mb-5">
+                <select id="classFilter"
+                    class="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Classes</option>
+                    <option value="9th">Class 9th</option>
+                    <option value="10th">Class 10th</option>
+                    <option value="11th">Class 11th</option>
+                    <option value="12th">Class 12th</option>
+                </select>
+            </div>
+
+            <% if (students && students.length> 0) { %>
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full text-left">
+
+                        <!-- Table Heading -->
+                        <thead>
+                            <tr class="border-b text-gray-500">
+                                <th class="py-3 px-3">Name</th>
+                                <th class="py-3 px-3">Email</th>
+                                <th class="py-3 px-3">Class</th>
+                                <th class="py-3 px-3">Status</th>
+                                <th class="py-3 px-3">Registered</th>
+                                <th class="py-3 px-3">Action</th>
+                            </tr>
+                        </thead>
+
+                        <!-- Student Data -->
+                        <tbody>
+
+                            <% students.forEach(student=> { %>
+
+                                <tr class="border-b hover:bg-gray-50">
+
+                                    <!-- Name -->
+                                    <td class="py-3 px-3 font-medium">
+                                        <%= student.fullName %>
+                                    </td>
+
+                                    <!-- Email -->
+                                    <td class="py-3 px-3 text-gray-600">
+                                        <%= student.email %>
+                                    </td>
+
+                                    <!-- Class -->
+                                    <td class="py-3 px-3">
+                                        <%= student.class %>
+                                    </td>
+
+                                    <!-- Status -->
+                                    <td class="py-3 px-3">
+
+                                        <% if (student.isActive) { %>
+
+                                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                                Active
+                                            </span>
+
+                                            <% } else { %>
+
+                                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                                                    Inactive
+                                                </span>
+
+                                                <% } %>
+
+                                    </td>
+
+                                    <!-- Registration Date -->
+                                    <td class="py-3 px-3 text-gray-600">
+                                        <%= new Date(student.createdAt).toLocaleDateString("en-IN") %>
+                                    </td>
+
+                                    <!-- Activate / Deactivate Button -->
+                                    <td class="py-3 px-3">
+
+                                        <button type="button" onclick="toggleStudentStatus('<%= student._id %>')"
+                                            class="px-3 py-2 rounded-lg text-white text-sm
+                                            <%= student.isActive ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700' %>">
+
+                                            <%= student.isActive ? 'Deactivate' : 'Activate' %>
+
+                                        </button>
+                                        <button type="button" onclick="deleteStudent('<%= student._id %>')"
+                                            class="px-3 py-2 mt-2 rounded-lg text-white text-sm bg-red-700 hover:bg-red-800">
+
+                                            Delete
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                                <% }); %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <% } else { %>
+
+                    <p class="text-gray-500 py-4">
+                        No students registered yet.
+                    </p>
+
+                    <% } %>
+
+        </section>
+
+    </main>
+
+    <!-- Search and Class Filter -->
+
+    <script>
+        const searchInput = document.getElementById("studentSearch");
+        const classFilter = document.getElementById("classFilter");
+
+        // Search and Class Filter
+        function filterStudents() {
+            const searchValue = searchInput.value.toLowerCase().trim();
+            const selectedClass = classFilter.value.toLowerCase();
+
+            const studentRows = document.querySelectorAll("tbody tr");
+
+            studentRows.forEach(row => {
+                const studentName = row.cells[0].textContent.toLowerCase();
+                const studentEmail = row.cells[1].textContent.toLowerCase();
+                const studentClass = row.cells[2].textContent.toLowerCase().trim();
+
+                const matchesSearch =
+                    studentName.includes(searchValue) ||
+                    studentEmail.includes(searchValue);
+
+                const matchesClass =
+                    selectedClass === "" ||
+                    studentClass === selectedClass;
+
+                row.style.display =
+                    matchesSearch && matchesClass ? "" : "none";
+            });
+        }
+
+        // Activate / Deactivate Student
+        async function toggleStudentStatus(studentId) {
+            const confirmAction = confirm(
+                "Are you sure you want to change this student's status?"
+            );
+
+            if (!confirmAction) return;
+
+            try {
+                const response = await fetch(
+                    `/admin/students/${studentId}/status`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.message || "Something went wrong!");
+                    return;
+                }
+
+                alert(data.message);
+
+                // Reload updated student list
+                window.location.reload();
+
+            } catch (error) {
+                console.error("Status update error:", error);
+                alert("Unable to update student status. Please try again.");
+            }
+        }
+
+        // Delete Student
+async function deleteStudent(studentId) {
+
+    const confirmDelete = confirm(
+        "Are you sure? This student will be permanently deleted!"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(
+            `/admin/students/${studentId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Unable to delete student!");
+            return;
+        }
+
+        alert(data.message);
+
+        // Refresh student list
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Delete student error:", error);
+        alert("Something went wrong. Please try again.");
+    }
+}
+        // Event Listeners
+        searchInput.addEventListener("input", filterStudents);
+        classFilter.addEventListener("change", filterStudents);
+
+    </script>
+
+
+</body>
+
+</html>

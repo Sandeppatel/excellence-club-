@@ -163,6 +163,77 @@
 
 </section>
 
+</section>
+
+<!-- Change Password Section -->
+<div class="bg-white shadow-md rounded-xl p-6 mt-6 mb-8">
+
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+        Change Password
+    </h2>
+
+    <form id="changePasswordForm" class="space-y-4">
+
+        <div>
+            <label class="block text-sm font-medium mb-1">
+                Current Password
+            </label>
+
+            <input
+                type="password"
+                id="currentPassword"
+                required
+                class="w-full border rounded-lg p-3"
+                placeholder="Enter current password"
+            >
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1">
+                New Password
+            </label>
+
+            <input
+                type="password"
+                id="newPassword"
+                required
+                minlength="8"
+                class="w-full border rounded-lg p-3"
+                placeholder="Enter new password"
+            >
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1">
+                Confirm New Password
+            </label>
+
+            <input
+                type="password"
+                id="confirmPassword"
+                required
+                minlength="8"
+                class="w-full border rounded-lg p-3"
+                placeholder="Confirm new password"
+            >
+        </div>
+
+        <p id="passwordMessage" class="text-sm"></p>
+
+        <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+        >
+            Update Password
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Courses Section -->
+<section>
+
 <script>
     const editProfileBtn = document.getElementById("editProfileBtn");
     const editProfileForm = document.getElementById("editProfileForm");
@@ -226,6 +297,62 @@
             saveProfileBtn.textContent = "Save Changes";
         }
     });
+
+
+// Change Password
+const changePasswordForm = document.getElementById("changePasswordForm");
+
+if (changePasswordForm) {
+    changePasswordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById("currentPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        const passwordMessage = document.getElementById("passwordMessage");
+        const submitBtn = changePasswordForm.querySelector("button[type='submit']");
+
+        passwordMessage.textContent = "";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Updating...";
+
+        try {
+            const response = await fetch("/student/password/change", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    currentPassword,
+                    newPassword,
+                    confirmPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Password update failed");
+            }
+
+            passwordMessage.textContent = data.message;
+            passwordMessage.className = "text-sm text-green-600";
+
+            changePasswordForm.reset();
+
+        } catch (error) {
+            passwordMessage.textContent = error.message;
+            passwordMessage.className = "text-sm text-red-600";
+
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Update Password";
+        }
+    });
+}
+
+
 </script>
 
 

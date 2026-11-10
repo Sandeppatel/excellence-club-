@@ -7,6 +7,7 @@ const {
 } = require("../controllers/studentDashboardController");
 
 const {
+    changeStudentPassword,
     logoutStudent
 } = require("../controllers/authController");
 
@@ -25,18 +26,27 @@ router.get("/register", (req, res) => {
     res.render("student/register");
 });
 
+// Student Forgot Password Page
+router.get("/forgot-password", (req, res) => {
+    res.render("student/forgot-password");
+});
+// Student Reset Password Page
+router.get("/reset-password/:token", (req, res) => {
+    res.render("student/reset-password", {
+        token: req.params.token
+    });
+});
 // Student Dashboard
-router.get(
-    "/dashboard",
-    requireStudent,
-    getStudentDashboard
-);
+router.get("/dashboard", requireStudent, getStudentDashboard);
 
 // Student Logout
-router.post(
-    "/logout",
+router.post("/logout", requireStudent, logoutStudent);
+
+// Student Change Password
+router.put(
+    "/password/change",
     requireStudent,
-    logoutStudent
+    changeStudentPassword
 );
-    
+
 module.exports = router;
