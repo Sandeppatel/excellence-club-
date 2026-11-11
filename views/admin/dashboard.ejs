@@ -15,20 +15,25 @@
 
     <!-- Navbar -->
     <nav class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
-        <h1 class="text-xl font-bold">
+        <a href="/" class="text-xl font-bold">
             Excellence Club Admin
-        </h1>
+        </a>
 
-        <form action="/admin/logout" method="POST">
-            <button type="submit"
-                class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
-                Logout
-            </button>
-        </form>
+        <div class="flex items-center gap-4">
+            <span class="hidden sm:block text-sm">
+                Welcome, <%= admin.fullName %>
+            </span>
+
+            <form action="/admin/logout" method="POST">
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                    Logout
+                </button>
+            </form>
+        </div>
     </nav>
 
-    <!-- Main Dashboard -->
-    <main class="p-6 md:p-8">
+    <main class="p-6 md:p-8 max-w-7xl mx-auto">
 
         <!-- Welcome Section -->
         <div class="mb-8">
@@ -44,32 +49,28 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <!-- Total Students -->
-            <div class="bg-white p-6 rounded-xl shadow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
                 <p class="text-gray-500 font-medium">Total Students</p>
                 <h2 class="text-3xl font-bold text-blue-600 mt-3">
                     <%= totalStudents %>
                 </h2>
             </div>
 
-            <!-- Active Students -->
-            <div class="bg-white p-6 rounded-xl shadow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
                 <p class="text-gray-500 font-medium">Active Students</p>
                 <h2 class="text-3xl font-bold text-green-600 mt-3">
                     <%= activeStudents %>
                 </h2>
             </div>
 
-            <!-- Total Courses -->
-            <div class="bg-white p-6 rounded-xl shadow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
                 <p class="text-gray-500 font-medium">Total Courses</p>
                 <h2 class="text-3xl font-bold text-purple-600 mt-3">
                     <%= totalCourses %>
                 </h2>
             </div>
 
-            <!-- Published Courses -->
-            <div class="bg-white p-6 rounded-xl shadow">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
                 <p class="text-gray-500 font-medium">Published Courses</p>
                 <h2 class="text-3xl font-bold text-orange-600 mt-3">
                     <%= publishedCourses %>
@@ -78,8 +79,62 @@
 
         </div>
 
+        <!-- Quick Actions -->
+        <section class="mt-10">
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-5">
+                Quick Actions
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Course Management -->
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-3xl mb-4">📚</div>
+
+                    <h3 class="text-xl font-bold text-gray-800">
+                        Course Management
+                    </h3>
+
+                    <p class="text-gray-500 text-sm mt-2">
+                        Create, edit, publish and manage courses for classes 9th to 12th.
+                    </p>
+
+                    <a href="/admin/courses"
+                        class="inline-block mt-5 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                        Manage Courses →
+                    </a>
+
+                    <a href="/admin/courses/create"
+                        class="block mt-3 text-blue-600 hover:underline text-sm font-medium">
+                        + Create New Course
+                    </a>
+                </div>
+
+                <!-- Student Management -->
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-3xl mb-4">👨‍🎓</div>
+
+                    <h3 class="text-xl font-bold text-gray-800">
+                        Student Management
+                    </h3>
+
+                    <p class="text-gray-500 text-sm mt-2">
+                        View students, search records and manage student accounts.
+                    </p>
+
+                    <a href="/admin/students"
+                        class="inline-block mt-5 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg">
+                        Manage Students →
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
         <!-- Recent Students -->
-        <section class="bg-white rounded-xl shadow mt-8 p-6">
+        <section class="bg-white rounded-xl shadow-sm mt-10 p-6">
 
             <h2 class="text-xl font-bold text-gray-800 mb-5">
                 Recent Registered Students

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-// Controllers
+
 const {
-    getStudentDashboard
+    getStudentDashboard,
+    getStudentCourseDetails
 } = require("../controllers/studentDashboardController");
 
 const {
@@ -38,6 +39,13 @@ router.get("/reset-password/:token", (req, res) => {
 });
 // Student Dashboard
 router.get("/dashboard", requireStudent, getStudentDashboard);
+
+
+router.get(
+    "/courses/:id",
+    requireStudent,
+    getStudentCourseDetails
+);
 
 // Student Logout
 router.post("/logout", requireStudent, logoutStudent);

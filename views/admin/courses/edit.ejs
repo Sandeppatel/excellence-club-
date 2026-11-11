@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course | Excellence Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="max-w-3xl mx-auto px-4 py-10">
+
+        <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Edit Course
+                </h1>
+
+                <p class="text-gray-500 mt-2">
+                    Update your course information.
+                </p>
+            </div>
+
+            <form id="editCourseForm" class="space-y-5">
+
+                <div>
+                    <label class="block font-semibold mb-2">Course Title</label>
+                    <input
+                        type="text"
+                        name="title"
+                        value="<%= course.title %>"
+                        required
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2">Subject</label>
+                    <input
+                        type="text"
+                        name="subject"
+                        value="<%= course.subject %>"
+                        required
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2">Class</label>
+                    <select
+                        name="class"
+                        required
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <option value="9th" <%= course.class === "9th" ? "selected" : "" %>>9th</option>
+                        <option value="10th" <%= course.class === "10th" ? "selected" : "" %>>10th</option>
+                        <option value="11th" <%= course.class === "11th" ? "selected" : "" %>>11th</option>
+                        <option value="12th" <%= course.class === "12th" ? "selected" : "" %>>12th</option>
+
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2">Description</label>
+                    <textarea
+                        name="description"
+                        rows="5"
+                        required
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"><%= course.description %></textarea>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2">Thumbnail URL</label>
+                    <input
+                        type="url"
+                        name="thumbnail"
+                        value="<%= course.thumbnail %>"
+                        class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <p id="message" class="text-sm font-medium"></p>
+
+                <div class="flex gap-3 pt-3">
+
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
+                        Update Course
+                    </button>
+
+                    <a
+                        href="/admin/courses"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("editCourseForm");
+        const message = document.getElementById("message");
+
+        const courseId = "<%= course._id %>";
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            const courseData = {
+                title: formData.get("title"),
+                subject: formData.get("subject"),
+                class: formData.get("class"),
+                description: formData.get("description"),
+                thumbnail: formData.get("thumbnail")
+            };
+
+            try {
+                message.textContent = "Updating course...";
+                message.className = "text-sm font-medium text-blue-600";
+
+                const response = await fetch(`/admin/courses/${courseId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(courseData)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Course update failed");
+                }
+
+                message.textContent = "Course updated successfully!";
+                message.className = "text-sm font-medium text-green-600";
+
+                setTimeout(() => {
+                    window.location.href = "/admin/courses";
+                }, 1000);
+
+            } catch (error) {
+                message.textContent = error.message;
+                message.className = "text-sm font-medium text-red-600";
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 const Course = require("../models/Course");
 
 // CREATE COURSE
+// CREATE COURSE
 const createCourse = async (req, res, next) => {
     try {
         const {
@@ -18,12 +19,16 @@ const createCourse = async (req, res, next) => {
             });
         }
 
+        // Get logged-in admin ID from session
+        const adminId = req.session.user.id;
+
         const course = await Course.create({
-            title,
-            subject,
+            title: title.trim(),
+            subject: subject.trim(),
             class: courseClass,
-            description,
-            thumbnail
+            description: description.trim(),
+            thumbnail: thumbnail || "",
+            createdBy: adminId
         });
 
         res.status(201).json({
@@ -31,6 +36,7 @@ const createCourse = async (req, res, next) => {
             message: "Course created successfully",
             data: course
         });
+
     } catch (error) {
         next(error);
     }
@@ -46,6 +52,47 @@ const getAllCourses = async (req, res, next) => {
             count: courses.length,
             data: courses
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+// RENDER ADMIN COURSES PAGE
+const getAdminCoursesPage = async (req, res, next) => {
+    try {
+        const courses = await Course.find().sort({ createdAt: -1 });
+
+        res.render("admin/courses/index", {
+            courses,
+            admin: req.session.user
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// RENDER CREATE COURSE PAGE
+const getCreateCoursePage = (req, res) => {
+    res.render("admin/courses/create", {
+        admin: req.session.user
+    });
+};
+
+const getEditCoursePage = async (req, res, next) => {
+    try {
+        const course = await Course.findById(req.params.id);
+
+        if (!course) {
+            return res.status(404).send("Course not found");
+        }
+
+        res.render("admin/courses/edit", {
+            course,
+            admin: req.session.user
+        });
+
     } catch (error) {
         next(error);
     }
@@ -136,10 +183,44 @@ const deleteCourse = async (req, res, next) => {
     }
 };
 
+
+// TOGGLE COURSE PUBLISH STATUS
+const toggleCoursePublish = async (req, res, next) => {
+    try {
+        const course = await Course.findById(req.params.id);
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            });
+        }
+
+        course.isPublished = !course.isPublished;
+
+        await course.save();
+
+        res.status(200).json({
+            success: true,
+            message: course.isPublished
+                ? "Course published successfully"
+                : "Course unpublished successfully",
+            data: course
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createCourse,
     getAllCourses,
     getCourseById,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    toggleCoursePublish,
+    getAdminCoursesPage,
+    getCreateCoursePage,
+    getEditCoursePage
 };

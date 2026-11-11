@@ -1,9 +1,5 @@
 require("dotenv").config();
-console.log("Sender Gmail:", process.env.EMAIL_USER);
-console.log(
-    "App Password Loaded:",
-    Boolean(process.env.EMAIL_APP_PASSWORD)
-);
+
 const express = require("express");
 const studentRoutes = require("./routes/studentRoutes");
 const courseRoutes = require("./routes/courseRoutes");

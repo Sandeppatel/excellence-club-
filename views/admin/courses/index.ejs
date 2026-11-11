@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management | Excellence Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Excellence Club</h1>
+        <div class="flex items-center gap-4">
+            <span class="text-sm">
+                <%= admin.fullName %>
+            </span>
+            <a href="/admin/dashboard" class="text-sm hover:text-blue-300">
+                Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-800">Course Management</h2>
+                <p class="text-gray-500 mt-2">
+                    Manage courses for classes 9th to 12th.
+                </p>
+            </div>
+
+            <a href="/admin/courses/create"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium">
+                + Create Course
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <p class="text-gray-500 text-sm">Total Courses</p>
+                <h3 class="text-3xl font-bold mt-2">
+                    <%= courses.length %>
+                </h3>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <p class="text-gray-500 text-sm">Published Courses</p>
+                <h3 class="text-3xl font-bold text-green-600 mt-2">
+                    <%= courses.filter(course=> course.isPublished).length %>
+                </h3>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <p class="text-gray-500 text-sm">Draft Courses</p>
+                <h3 class="text-3xl font-bold text-orange-500 mt-2">
+                    <%= courses.filter(course=> !course.isPublished).length %>
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-semibold text-gray-800">
+                    All Courses
+                </h3>
+            </div>
+
+            <% if (courses.length===0) { %>
+
+                <div class="text-center py-16 px-6">
+                    <h3 class="text-xl font-semibold text-gray-700">
+                        No courses available
+                    </h3>
+                    <p class="text-gray-500 mt-2">
+                        Create your first course to get started.
+                    </p>
+                </div>
+
+                <% } else { %>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-600 text-sm">
+                                <tr>
+                                    <th class="p-4">Course</th>
+                                    <th class="p-4">Subject</th>
+                                    <th class="p-4">Class</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4">Created</th>
+                                    <th class="p-4">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="divide-y">
+
+                                <% courses.forEach(course=> { %>
+
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-4 font-medium text-gray-800">
+                                            <%= course.title %>
+                                        </td>
+
+                                        <td class="p-4 text-gray-600">
+                                            <%= course.subject %>
+                                        </td>
+
+                                        <td class="p-4 text-gray-600">
+                                            <%= course.class %>
+                                        </td>
+
+                                        <td class="p-4">
+                                            <% if (course.isPublished) { %>
+                                                <span
+                                                    class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                    Published
+                                                </span>
+                                                <% } else { %>
+                                                    <span
+                                                        class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                        Draft
+                                                    </span>
+                                                    <% } %>
+                                        </td>
+
+                                        <td class="p-4 text-gray-500 text-sm">
+                                            <%= new Date(course.createdAt).toLocaleDateString("en-IN") %>
+                                        </td>
+                                        <td class="p-4">
+                                            <!-- Edit Button -->
+                                            <a href="/admin/courses/edit/<%= course._id %>"
+                                                class="inline-block bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-200">
+                                                Edit
+                                            </a>
+                                                 
+                                            <!-- Publish / Unpublish Button -->
+                                            <button onclick="togglePublish('<%= course._id %>')" class="<%= course.isPublished
+                                                  ? 'bg-orange-100 text-orange-700'
+                                                   : 'bg-green-100 text-green-700' %>
+                                                   px-3 py-2 rounded-lg text-sm font-medium">
+
+                                                <%= course.isPublished ? 'Unpublish' : 'Publish' %>
+                                            </button>
+
+                                            <!-- Delete Button -->
+<button
+    onclick="deleteCourse('<%= course._id %>')"
+    class="bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-200">
+    Delete
+</button>
+                                        </td>
+                                    </tr>
+
+                                    <% }) %>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <% } %>
+
+        </div>
+
+    </main>
+
+    <script>
+        async function togglePublish(courseId) {
+            try {
+                const response = await fetch(
+                    `/admin/courses/${courseId}/publish`,
+                    {
+                        method: "PATCH"
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Status update failed");
+                }
+
+                alert(result.message);
+
+                window.location.reload();
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+   async function deleteCourse(courseId) {
+    const confirmed = confirm(
+        "Are you sure you want to delete this course? This action cannot be undone."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/courses/${courseId}`, {
+            method: "DELETE"
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Course deletion failed");
+        }
+
+        alert("Course deleted successfully!");
+
+        window.location.reload();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+   </script>
+</body>
+
+</html>
